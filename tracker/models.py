@@ -8,3 +8,24 @@ class Crew(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class City(models.Model):
+    name = models.CharField(max_length=255)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name}({self.country.name})"
+
+
+class Airport(models.Model):
+    name = models.CharField(max_length=255)
+    closest_big_city = models.ForeignKey(City, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name}({self.closest_big_city.name})"
