@@ -75,7 +75,15 @@ class Airplane(models.Model):
     name = models.CharField(max_length=255)
     rows = models.IntegerField()
     seats_in_row = models.IntegerField()
+    facilities = models.ManyToManyField(
+        AirplaneFacility,
+        related_name="airplanes"
+    )
     airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE)
+
+    @property
+    def capacity(self):
+        return self.seats_in_row * self.rows
 
     def __str__(self):
         return f"{self.name}({self.airplane_type.name})"
