@@ -1,6 +1,6 @@
-from turtle import distance
-
+from django.conf import settings
 from django.db import models
+
 
 class Crew(models.Model):
     first_name = models.CharField(max_length=255)
@@ -23,6 +23,9 @@ class City(models.Model):
 
     def __str__(self):
         return f"{self.name}({self.country.name})"
+
+    class Meta:
+        ordering = ["country", "name"]
 
 
 class Airport(models.Model):
@@ -59,3 +62,15 @@ class Airplane(models.Model):
     def __str__(self):
         return f"{self.name}({self.airplane_type.name})"
 
+
+class Order(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return str(self.created_at)
+
+    class Meta:
+        ordering = ["-created_at"]
