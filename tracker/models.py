@@ -42,3 +42,20 @@ class Route(models.Model):
         return f"{self.source.name} -> {self.destination.name}: " \
                f"{self.distance} km"
 
+
+class AirplaneType(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class Airplane(models.Model):
+    name = models.CharField(max_length=255)
+    rows = models.IntegerField()
+    seats_in_row = models.IntegerField()
+    airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name}({self.airplane_type.name})"
+
