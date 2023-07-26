@@ -42,8 +42,7 @@ class Route(models.Model):
     distance = models.IntegerField()
 
     def __str__(self):
-        return f"{self.source.name} -> {self.destination.name}: " \
-               f"{self.distance} km"
+        return f"{self.source.name} -> {self.destination.name}"
 
 
 class AirplaneType(models.Model):
@@ -89,3 +88,41 @@ class Flight(models.Model):
 
     class Meta:
         ordering = ["departure_time"]
+
+
+class Ticket(models.Model):
+    ROW_CHOICES = (
+        ("A", "A"),
+        ("B", "B"),
+        ("C", "C"),
+        ("D", "D"),
+        ("E", "E"),
+        ("F", "F"),
+        ("G", "G"),
+        ("H", "H"),
+        ("I", "I"),
+        ("J", "J"),
+        ("K", "K"),
+        ("L", "L"),
+        ("M", "M"),
+        ("N", "N"),
+        ("O", "O"),
+        ("P", "P"),
+        ("Q", "Q"),
+        ("R", "R"),
+        ("S", "S"),
+        ("T", "T"),
+        ("U", "U"),
+        ("V", "V"),
+        ("W", "W"),
+        ("X", "X"),
+        ("Y", "Y"),
+        ("Z", "Z"),
+    )
+    row = models.CharField(max_length=7, choices=ROW_CHOICES)
+    seat = models.IntegerField()
+    flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.flight.route}: {self.row}{self.seat}"
