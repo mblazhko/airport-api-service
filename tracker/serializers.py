@@ -64,3 +64,11 @@ class AirportDetailSerializer(AirportSerializer):
     class Meta:
         model = Airport
         fields = ("id", "name", "country", "closest_big_city", "facilities")
+
+
+class RouteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Route
+        fields = ("id", "source", "destination", "distance")
+
+
