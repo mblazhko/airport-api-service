@@ -1,3 +1,5 @@
+from turtle import distance
+
 from django.db import models
 
 class Crew(models.Model):
@@ -29,3 +31,14 @@ class Airport(models.Model):
 
     def __str__(self):
         return f"{self.name}({self.closest_big_city.name})"
+
+
+class Route(models.Model):
+    source = models.ForeignKey(Airport, on_delete=models.CASCADE)
+    destination = models.ForeignKey(Airport, on_delete=models.CASCADE)
+    distance = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.source.name} -> {self.destination.name}: " \
+               f"{self.distance} km"
+
