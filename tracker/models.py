@@ -196,7 +196,7 @@ class Ticket(models.Model):
         ("Y", "Y"),
         ("Z", "Z"),
     )
-
+    passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     seat = models.CharField(max_length=7, choices=ROW_CHOICES)
     row = models.IntegerField(
         validators=[
