@@ -6,7 +6,7 @@ from tracker.views import (
     CountryViewSet,
     CityViewSet,
     AirplaneFacilityViewSet,
-    AirportFacility,
+    AirportFacilityViewSet,
     AirportViewSet,
     RouteViewSet,
     AirplaneViewSet,
@@ -22,7 +22,7 @@ router.register("crews", CrewViewSet)
 router.register("countries", CountryViewSet)
 router.register("cities", CityViewSet)
 router.register("airplane_facilities", AirplaneFacilityViewSet)
-router.register("airport_facilities", AirportFacility)
+router.register("airport_facilities", AirportFacilityViewSet)
 router.register("airports", AirportViewSet)
 router.register("routes", RouteViewSet)
 router.register("airplanes", AirplaneViewSet)
@@ -32,6 +32,9 @@ router.register("flights", FlightViewSet)
 router.register("passengers", PassengerViewSet)
 router.register("tickets", TicketViewSet)
 
-urlpatterns = [path("", include(router.urls))]
+urlpatterns = [
+    path("", include(router.urls))
+]
+
 
 app_name = "tracker"
