@@ -8,7 +8,7 @@ from tracker.models import Airport, Crew, Country, City, Route, AirplaneType, \
 class CrewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Crew
-        fields = ("id", "first_name", "last_name")
+        fields = ("id", "first_name", "last_name", "position")
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -147,3 +147,10 @@ class FlightSerializer(serializers.ModelSerializer):
         fields = ("id", "route", "airplane", "terminal", "gate", "departure_time", "arrival_time", "crews")
 
 
+class FlightListSerializer(FlightSerializer):
+    crews = serializers.SlugRelatedField(many=True, read_only=True, slug_field="full_name")
+    route = serializers.CharField(source="route.full_way", read_only=True)
+    airplane = serializers.CharField(source="airplane.name", read_only=True)
+    class Meta:
+        model = Flight
+        fields = ("id", "route", "airplane", "terminal", "gate", "departure_time", "arrival_time", "crews")
