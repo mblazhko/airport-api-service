@@ -124,6 +124,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 Ticket.objects.create(order=order, **ticket_data)
             return order
 
+
 class OrderListSerializer(OrderSerializer):
     tickets_quantity = serializers.IntegerField(
         source="tickets.count",
@@ -139,6 +140,12 @@ class OrderDetailSerializer(OrderSerializer):
     class Meta:
         model = Order
         fields = ("id", "created_at", "tickets")
+
+
+class PassengerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Crew
+        fields = ("id", "first_name", "last_name")
 
 
 class FlightSerializer(serializers.ModelSerializer):
