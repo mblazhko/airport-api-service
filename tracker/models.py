@@ -72,9 +72,38 @@ class AirplaneType(models.Model):
 
 
 class Airplane(models.Model):
+    SEAT_LETTERS_CHOICES = (
+        ("A", "A"),
+        ("B", "B"),
+        ("C", "C"),
+        ("D", "D"),
+        ("E", "E"),
+        ("F", "F"),
+        ("G", "G"),
+        ("H", "H"),
+        ("I", "I"),
+        ("J", "J"),
+        ("K", "K"),
+        ("L", "L"),
+        ("M", "M"),
+        ("N", "N"),
+        ("O", "O"),
+        ("P", "P"),
+        ("Q", "Q"),
+        ("R", "R"),
+        ("S", "S"),
+        ("T", "T"),
+        ("U", "U"),
+        ("V", "V"),
+        ("W", "W"),
+        ("X", "X"),
+        ("Y", "Y"),
+        ("Z", "Z"),
+    )
     name = models.CharField(max_length=255)
     rows = models.IntegerField()
     seats_in_row = models.IntegerField()
+    seat_letter = models.CharField(max_length=10, choices=SEAT_LETTERS_CHOICES)
     facilities = models.ManyToManyField(
         AirplaneFacility,
         related_name="airplanes"
@@ -84,6 +113,17 @@ class Airplane(models.Model):
     @property
     def capacity(self):
         return self.seats_in_row * self.rows
+
+    def clean(self):
+        super().clean()
+        selected_seat_letters = self.seat_letter.replace(" ", "")
+        if len(selected_seat_letters) != self.seats_in_row:
+            raise ValidationError(
+                "Number of selected seat letters must match seats in a row.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name}({self.airplane_type.name})"
@@ -146,8 +186,8 @@ class Ticket(models.Model):
         ("Y", "Y"),
         ("Z", "Z"),
     )
-    row = models.CharField(max_length=7, choices=ROW_CHOICES)
-    seat = models.IntegerField()
+    seat = models.CharField(max_length=7, choices=ROW_CHOICES)
+    row = models.IntegerField()
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
