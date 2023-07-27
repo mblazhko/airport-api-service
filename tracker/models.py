@@ -37,14 +37,7 @@ class City(models.Model):
         ordering = ["country", "name"]
 
 
-class AirportFacility(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-
-class AirplaneFacility(models.Model):
+class Facility(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -54,7 +47,7 @@ class AirplaneFacility(models.Model):
 class Airport(models.Model):
     name = models.CharField(max_length=255)
     facilities = models.ManyToManyField(
-        AirportFacility, related_name="airports"
+        Facility, related_name="airports"
     )
     closest_big_city = models.ForeignKey(City, on_delete=models.CASCADE)
 
@@ -124,7 +117,7 @@ class Airplane(models.Model):
         max_length=255,
     )
     facilities = models.ManyToManyField(
-        AirplaneFacility, related_name="airplanes"
+        Facility, related_name="airplanes"
     )
     airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE)
 
