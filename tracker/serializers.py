@@ -2,7 +2,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from tracker.models import Airport, Crew, Country, City, Route, AirplaneType, \
-    Airplane, Order, Flight, Ticket
+    Airplane, Order, Flight, Ticket, AirplaneFacility, AirportFacility
 
 
 class CrewSerializer(serializers.ModelSerializer):
@@ -25,13 +25,13 @@ class CitySerializer(serializers.ModelSerializer):
 
 class AirportFacilitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Airport
+        model = AirportFacility
         fields = ("id", "name")
 
 
 class AirplaneFacilitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Airplane
+        model = AirplaneFacility
         fields = ("id", "name")
 
 
@@ -80,9 +80,11 @@ class AirplaneTypeSerializer(serializers.ModelSerializer):
 
 
 class AirplaneSerializer(serializers.ModelSerializer):
+    seat_letters = serializers.MultipleChoiceField(
+        choices=Airplane.SEAT_LETTERS_CHOICES)
     class Meta:
         model = Airplane
-        fields = ("id", "name", "rows", "seats_in_row", "airplane_type")
+        fields = ("id", "name", "rows", "seats_in_row", "airplane_type", "seat_letters", "facilities")
 
 
 class AirplaneListSerializer(AirplaneSerializer):
