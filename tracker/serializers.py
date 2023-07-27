@@ -14,13 +14,13 @@ class CrewSerializer(serializers.ModelSerializer):
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = City
+        model = Country
         fields = ("id", "name")
 
 
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Country
+        model = City
         fields = ("id", "name", "country")
 
 
