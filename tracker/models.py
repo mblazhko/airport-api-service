@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import F
+from multiselectfield import MultiSelectField
 
 
 class Crew(models.Model):
@@ -53,8 +54,7 @@ class AirplaneFacility(models.Model):
 class Airport(models.Model):
     name = models.CharField(max_length=255)
     facilities = models.ManyToManyField(
-        AirportFacility,
-        related_name="airports"
+        AirportFacility, related_name="airports"
     )
     closest_big_city = models.ForeignKey(City, on_delete=models.CASCADE)
 
@@ -63,8 +63,12 @@ class Airport(models.Model):
 
 
 class Route(models.Model):
-    source = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="depature_routes")
-    destination = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="arriving_routes")
+    source = models.ForeignKey(
+        Airport, on_delete=models.CASCADE, related_name="depature_routes"
+    )
+    destination = models.ForeignKey(
+        Airport, on_delete=models.CASCADE, related_name="arriving_routes"
+    )
     distance = models.IntegerField()
 
     @property
@@ -114,10 +118,13 @@ class Airplane(models.Model):
     name = models.CharField(max_length=255)
     rows = models.IntegerField()
     seats_in_row = models.IntegerField()
-    seat_letters = models.CharField(max_length=10, choices=SEAT_LETTERS_CHOICES)
+    seat_letters = MultiSelectField(
+        choices=SEAT_LETTERS_CHOICES,
+        max_choices=10,
+        max_length=10,
+    )
     facilities = models.ManyToManyField(
-        AirplaneFacility,
-        related_name="airplanes"
+        AirplaneFacility, related_name="airplanes"
     )
     airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE)
 
@@ -127,10 +134,10 @@ class Airplane(models.Model):
 
     def clean(self):
         super().clean()
-        selected_seat_letters = self.seat_letters.replace(" ", "")
-        if len(selected_seat_letters) != self.seats_in_row:
+        if len(self.seat_letters) != self.seats_in_row:
             raise ValidationError(
-                "Number of selected seat letters must match seats in a row.")
+                "Number of selected seat letters must match seats in a row."
+            )
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -163,8 +170,10 @@ class Flight(models.Model):
     gate = models.IntegerField()
 
     def __str__(self):
-        return f"{self.route.source.name} -> {self.route.destination.name}: " \
-               f"{self.departure_time} -> {self.arrival_time}"
+        return (
+            f"{self.route.source.name} -> {self.route.destination.name}: "
+            f"{self.departure_time} -> {self.arrival_time}"
+        )
 
     class Meta:
         ordering = ["departure_time"]
@@ -212,7 +221,7 @@ class Ticket(models.Model):
     row = models.IntegerField(
         validators=[
             MinValueValidator(1),
-            MaxValueValidator(F('flight__airplane__rows'))
+            MaxValueValidator(F("flight__airplane__rows")),
         ]
     )
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
@@ -226,7 +235,8 @@ class Ticket(models.Model):
         super().clean()
         if self.seat not in self.flight.airplane.seat_letter:
             raise ValidationError(
-                f"{self.flight.airplane.name} does not have seat {self.seat}")
+                f"{self.flight.airplane.name} does not have seat {self.seat}"
+            )
 
     def __str__(self):
         return f"{self.flight.route}: {self.row}{self.seat}"
