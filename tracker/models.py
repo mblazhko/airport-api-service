@@ -105,7 +105,7 @@ class Airplane(models.Model):
     name = models.CharField(max_length=255)
     rows = models.IntegerField()
     seats_in_row = models.IntegerField()
-    seat_letter = models.CharField(max_length=10, choices=SEAT_LETTERS_CHOICES)
+    seat_letters = models.CharField(max_length=10, choices=SEAT_LETTERS_CHOICES)
     facilities = models.ManyToManyField(
         AirplaneFacility,
         related_name="airplanes"
@@ -118,7 +118,7 @@ class Airplane(models.Model):
 
     def clean(self):
         super().clean()
-        selected_seat_letters = self.seat_letter.replace(" ", "")
+        selected_seat_letters = self.seat_letters.replace(" ", "")
         if len(selected_seat_letters) != self.seats_in_row:
             raise ValidationError(
                 "Number of selected seat letters must match seats in a row.")
@@ -168,7 +168,7 @@ class Passenger(models.Model):
 
 
 class Ticket(models.Model):
-    ROW_CHOICES = (
+    SEAT_CHOICES = (
         ("A", "A"),
         ("B", "B"),
         ("C", "C"),
@@ -197,7 +197,7 @@ class Ticket(models.Model):
         ("Z", "Z"),
     )
     passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
-    seat = models.CharField(max_length=7, choices=ROW_CHOICES)
+    seat_letter = models.CharField(max_length=7, choices=SEAT_CHOICES)
     row = models.IntegerField(
         validators=[
             MinValueValidator(1),
@@ -206,6 +206,10 @@ class Ticket(models.Model):
     )
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    @property
+    def seat(self):
+        return f"{self.row}{self.seat_letter}"
 
     def clean(self):
         super().clean()
