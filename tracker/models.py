@@ -159,6 +159,14 @@ class Flight(models.Model):
         ordering = ["departure_time"]
 
 
+class Passenger(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
 class Ticket(models.Model):
     ROW_CHOICES = (
         ("A", "A"),
@@ -188,6 +196,7 @@ class Ticket(models.Model):
         ("Y", "Y"),
         ("Z", "Z"),
     )
+
     seat = models.CharField(max_length=7, choices=ROW_CHOICES)
     row = models.IntegerField(
         validators=[
