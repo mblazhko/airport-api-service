@@ -51,11 +51,10 @@ class Facility(models.Model):
     class Meta:
         verbose_name_plural = "Facilities"
 
+
 class Airport(models.Model):
     name = models.CharField(max_length=255)
-    facilities = models.ManyToManyField(
-        Facility, related_name="airports"
-    )
+    facilities = models.ManyToManyField(Facility, related_name="airports")
     closest_big_city = models.ForeignKey(City, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -123,9 +122,7 @@ class Airplane(models.Model):
         max_choices=10,
         max_length=255,
     )
-    facilities = models.ManyToManyField(
-        Facility, related_name="airplanes"
-    )
+    facilities = models.ManyToManyField(Facility, related_name="airplanes")
     airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE)
 
     @property
@@ -218,12 +215,7 @@ class Ticket(models.Model):
     )
     passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     seat_letter = models.CharField(max_length=7, choices=SEAT_CHOICES)
-    row = models.IntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(F("flight__airplane__rows")),
-        ]
-    )
+    row = models.IntegerField(validators=[MinValueValidator(1)])
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
@@ -233,9 +225,14 @@ class Ticket(models.Model):
 
     def clean(self):
         super().clean()
-        if self.seat not in self.flight.airplane.seat_letter:
+        if self.seat_letter not in self.flight.airplane.seat_letters:
             raise ValidationError(
-                f"{self.flight.airplane.name} does not have seat {self.seat}"
+                f"{self.flight.airplane.name} does not have seat {self.seat_letter}"
+            )
+        if self.row > self.flight.airplane.rows:
+            raise ValidationError(
+                f"{self.flight.airplane.name} does not have row {self.row}"
+                f"(maximum is {self.flight.airplane.rows})"
             )
 
     def __str__(self):
