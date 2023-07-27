@@ -1,7 +1,19 @@
 from django.contrib import admin
 
-from tracker.models import Airport, Crew, Country, City, Route, AirplaneType, \
-    Airplane, Order, Flight, Ticket, Passenger
+from tracker.models import (
+    Airport,
+    Crew,
+    Country,
+    City,
+    Route,
+    AirplaneType,
+    Airplane,
+    Order,
+    Flight,
+    Ticket,
+    Passenger,
+    Facility,
+)
 
 admin.site.register(Crew)
 admin.site.register(Country)
@@ -14,3 +26,4 @@ admin.site.register(Order)
 admin.site.register(Flight)
 admin.site.register(Ticket)
 admin.site.register(Passenger)
+admin.site.register(Facility)
