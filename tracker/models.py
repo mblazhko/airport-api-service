@@ -25,6 +25,10 @@ class Country(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["name"]
+        verbose_name_plural = "Countries"
+
 
 class City(models.Model):
     name = models.CharField(max_length=255)
@@ -35,6 +39,7 @@ class City(models.Model):
 
     class Meta:
         ordering = ["country", "name"]
+        verbose_name_plural = "Cities"
 
 
 class Facility(models.Model):
@@ -43,6 +48,8 @@ class Facility(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "Facilities"
 
 class Airport(models.Model):
     name = models.CharField(max_length=255)
