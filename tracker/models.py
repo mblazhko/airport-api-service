@@ -67,6 +67,10 @@ class Route(models.Model):
     destination = models.ForeignKey(Airport, on_delete=models.CASCADE)
     distance = models.IntegerField()
 
+    @property
+    def full_way(self):
+        return f"From {self.source.name} to {self.destination.name}"
+
     def __str__(self):
         return f"{self.source.name} -> {self.destination.name}"
 
