@@ -150,6 +150,8 @@ class Flight(models.Model):
     departure_time = models.DateTimeField()
     arrival_time = models.DateTimeField()
     crews = models.ManyToManyField(Crew, related_name="flights")
+    terminal = models.CharField(max_length=10)
+    gate = models.IntegerField()
 
     def __str__(self):
         return f"{self.route.source.name} -> {self.route.destination.name}: " \
