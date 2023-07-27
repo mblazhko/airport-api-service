@@ -139,3 +139,11 @@ class OrderDetailSerializer(OrderSerializer):
     class Meta:
         model = Order
         fields = ("id", "created_at", "tickets")
+
+
+class FlightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flight
+        fields = ("id", "route", "airplane", "terminal", "gate", "departure_time", "arrival_time", "crews")
+
+
