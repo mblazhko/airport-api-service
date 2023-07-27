@@ -121,7 +121,7 @@ class Airplane(models.Model):
     seat_letters = MultiSelectField(
         choices=SEAT_LETTERS_CHOICES,
         max_choices=10,
-        max_length=10,
+        max_length=255,
     )
     facilities = models.ManyToManyField(
         AirplaneFacility, related_name="airplanes"
