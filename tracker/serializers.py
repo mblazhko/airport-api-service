@@ -98,7 +98,7 @@ class AirplaneDetailSerializer(AirplaneSerializer):
     facilities = AirplaneFacilitySerializer(many=True, read_only=True)
     class Meta:
         model = Airplane
-        fields = ("id", "name", "rows", "seats_in_row", "capacity", "airplane_type", "facilities")
+        fields = ("id", "name", "rows", "seats_in_row", "seat_letter", "capacity", "airplane_type", "facilities")
 
 
 class OrderSerializer(serializers.ModelSerializer):
