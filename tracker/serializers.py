@@ -154,3 +154,9 @@ class FlightListSerializer(FlightSerializer):
     class Meta:
         model = Flight
         fields = ("id", "route", "airplane", "terminal", "gate", "departure_time", "arrival_time", "crews")
+
+
+class FlightDetailSerializer(FlightSerializer):
+    crews = CrewSerializer(many=True, read_only=True)
+    route = RouteSerializer(source="route", read_only=True)
+    airplane = AirplaneSerializer(source="airplane", read_only=True)
