@@ -67,7 +67,10 @@ class FacilityViewSet(
 
 
 class AirportViewSet(
-    viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
 ):
     queryset = Airport.objects.all()
     serializer_class = AirportSerializer
@@ -88,7 +91,10 @@ class RouteViewSet(
 
 
 class AirplaneViewSet(
-    viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
 ):
     queryset = Airplane.objects.all()
     serializer_class = AirplaneSerializer
@@ -127,7 +133,10 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 class FlightViewSet(
-    viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
 ):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
