@@ -200,11 +200,22 @@ class AirplaneViewSet(
 
     def get_queryset(self):
         name = self.request.query_params.get("source")
+        facilities = self.request.query_params.get("facilities")
+        airplane_type = self.request.query_params.get("airplane_type")
 
         queryset = self.queryset
 
         if name:
             queryset = queryset.filter(name__icontains=name)
+
+        if facilities:
+            facilities_ids = params_to_ints(facilities)
+            queryset = queryset.filter(facilities__id__in=facilities_ids)
+
+        if airplane_type:
+            queryset = queryset.filter(
+                airplane_type__name__icontains=airplane_type
+            )
 
         return queryset.distinct()
 
@@ -214,6 +225,16 @@ class AirplaneTypeViewSet(
 ):
     queryset = AirplaneType.objects.all()
     serializer_class = AirplaneTypeSerializer
+
+    def get_queryset(self):
+        name = self.request.query_params.get("source")
+
+        queryset = self.queryset
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        return queryset.distinct()
 
 
 class OrderViewSet(viewsets.ModelViewSet):
