@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import F
 from multiselectfield import MultiSelectField
 
 
@@ -227,7 +226,9 @@ class Ticket(models.Model):
         super().clean()
         if self.seat_letter not in self.flight.airplane.seat_letters:
             raise ValidationError(
-                f"{self.flight.airplane.name} does not have seat {self.seat_letter}"
+                f"{self.flight.airplane.name} "
+                f"does not have seat {self.seat_letter}"
+                f"(available seats: {self.flight.airplane.seat_letters})"
             )
         if self.row > self.flight.airplane.rows:
             raise ValidationError(
