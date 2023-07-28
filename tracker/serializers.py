@@ -133,10 +133,14 @@ class OrderListSerializer(OrderSerializer):
 
 
 class OrderDetailSerializer(OrderSerializer):
-    tickets = TicketSerializer(many=True, read_only=True)
+    tickets = serializers.SerializerMethodField()
     class Meta:
         model = Order
         fields = ("id", "created_at", "tickets")
+
+    def get_tickets(self, obj):
+        tickets = obj.tickets.all()
+        return TicketSerializer(tickets, many=True).data
 
 
 class PassengerSerializer(serializers.ModelSerializer):
