@@ -38,6 +38,11 @@ from tracker.serializers import (
 )
 
 
+def params_to_ints(qs) -> list[int]:
+    """Converts a list of string IDs to a list of integers"""
+    return [int(str_id) for str_id in qs.split(",")]
+
+
 class CrewViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
 ):
@@ -85,6 +90,19 @@ class CityViewSet(
     queryset = City.objects.all()
     serializer_class = CitySerializer
 
+    def get_queryset(self):
+        name = self.request.query_params.get("name")
+        country = self.request.query_params.get("country")
+
+        queryset = self.queryset
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        if country:
+            queryset = queryset.filter(country=country)
+
+        return queryset.distinct()
 
 class FacilityViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
