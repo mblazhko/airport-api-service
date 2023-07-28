@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db.models import Q
 from rest_framework import viewsets, mixins
 
 from tracker.models import (
@@ -324,3 +325,20 @@ class PassengerViewSet(
 class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+
+    def get_queryset(self):
+        seat = self.request.query_params.get("seat")
+        passenger = self.request.query_params.get("passenger")
+
+        queryset = self.queryset
+
+        if seat:
+            queryset = queryset.filter(seat=seat)
+
+        if passenger:
+            queryset = queryset.filter(
+                Q(passenger__first_name=passenger) |
+                Q(passenger__last_name=passenger)
+            )
+
+        return queryset.distinct()
