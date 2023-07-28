@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db.models import Q
 from rest_framework import viewsets, mixins
+from rest_framework.permissions import IsAuthenticated
 
 from tracker.models import (
     Crew,
@@ -243,6 +244,7 @@ class AirplaneTypeViewSet(
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         date = self.request.query_params.get("date")
@@ -325,6 +327,7 @@ class PassengerViewSet(
 class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         seat = self.request.query_params.get("seat")
