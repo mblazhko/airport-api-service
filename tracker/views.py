@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import viewsets, mixins
 
 from tracker.models import (
@@ -227,7 +229,7 @@ class AirplaneTypeViewSet(
     serializer_class = AirplaneTypeSerializer
 
     def get_queryset(self):
-        name = self.request.query_params.get("source")
+        name = self.request.query_params.get("name")
 
         queryset = self.queryset
 
@@ -247,7 +249,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
         
         if date:
-            queryset = queryset.filter(created_at=date)
+            date = datetime.strptime(date, "%Y-%m-%d").date()
+            queryset = queryset.filter(created_at__date=date)
 
         return queryset.filter(user=self.request.user)
 
@@ -270,6 +273,23 @@ class FlightViewSet(
 ):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
+
+    def get_queryset(self):
+        departure_time = self.request.query_params.get("departure_time")
+        arrival_time = self.request.query_params.get("arrival_time")
+
+
+        queryset = self.queryset
+
+        if departure_time:
+            date = datetime.strptime(departure_time, "%Y-%m-%d").date()
+            queryset = queryset.filter(departure_time__date=date)
+
+        if arrival_time:
+            date = datetime.strptime(arrival_time, "%Y-%m-%d").date()
+            queryset = queryset.filter(arrival_time__date=date)
+
+        return queryset.distinct()
 
     def get_serializer_class(self):
         if self.action == "list":
