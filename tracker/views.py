@@ -110,6 +110,16 @@ class FacilityViewSet(
     queryset = Facility.objects.all()
     serializer_class = FacilitySerializer
 
+    def get_queryset(self):
+        name = self.request.query_params.get("name")
+
+        queryset = self.queryset
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        return queryset.distinct()
+
 
 class AirportViewSet(
     viewsets.GenericViewSet,
