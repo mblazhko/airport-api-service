@@ -130,6 +130,27 @@ class AirportViewSet(
     queryset = Airport.objects.all()
     serializer_class = AirportSerializer
 
+    def get_queryset(self):
+        name = self.request.query_params.get("name")
+        facilities = self.request.query_params.get("facilities")
+        closest_big_city = self.request.query_params.get("closest_big_city")
+
+        queryset = self.queryset
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        if facilities:
+            facilities_ids = params_to_ints(facilities)
+            queryset = queryset.filter(facilities__id__in=facilities_ids)
+
+        if closest_big_city:
+            queryset = queryset.filter(
+                closest_big_city__name=closest_big_city
+            )
+
+        return queryset.distinct()
+
     def get_serializer_class(self):
         if self.action == "list":
             return AirportListSerializer
