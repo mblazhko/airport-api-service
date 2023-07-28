@@ -47,7 +47,7 @@ class AirportListSerializer(AirportSerializer):
 
     class Meta:
         model = Airport
-        fields = ("id", "name", "country", "closest_big_city" "facilities")
+        fields = ("id", "name", "country", "closest_big_city", "facilities")
 
 
 class AirportDetailSerializer(AirportSerializer):
