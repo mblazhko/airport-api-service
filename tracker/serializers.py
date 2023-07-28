@@ -99,16 +99,26 @@ class AirplaneDetailSerializer(AirplaneSerializer):
 
 
 class TicketSerializer(serializers.ModelSerializer):
-    departure_time = serializers.DateTimeField(source="flight.departure_time", read_only=True)
-    arrival_time = serializers.DateTimeField(source="flight.arrival_time", read_only=True)
-    gate = serializers.IntegerField(source="flight.gate", read_only=True)
-    terminal = serializers.CharField(source="flight.terminal", read_only=True)
+    departure_time = serializers.DateTimeField(source="flight.departure_time")
+    arrival_time = serializers.DateTimeField(source="flight.arrival_time")
+    gate = serializers.IntegerField(source="flight.gate")
+    terminal = serializers.CharField(source="flight.terminal")
+
     class Meta:
         model = Ticket
-        fields = ("id", "passenger", "seat", "gate", "terminal", "departure_time", "arrival_time")
+        fields = (
+            "id",
+            "passenger",
+            "seat",
+            "gate",
+            "terminal",
+            "departure_time",
+            "arrival_time",
+        )
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    tickets = TicketSerializer(many=True)
     class Meta:
         model = Order
         fields = ("id", "created_at", "tickets")
