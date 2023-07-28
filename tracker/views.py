@@ -198,6 +198,16 @@ class AirplaneViewSet(
             return AirplaneDetailSerializer
         return AirplaneSerializer
 
+    def get_queryset(self):
+        name = self.request.query_params.get("source")
+
+        queryset = self.queryset
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        return queryset.distinct()
+
 
 class AirplaneTypeViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
