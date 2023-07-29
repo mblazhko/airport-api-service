@@ -205,9 +205,12 @@ class Ticket(models.Model):
         ("Y", "Y"),
         ("Z", "Z"),
     )
-    # passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
-    passenger_first_name = models.CharField(max_length=255)
-    passenger_last_name = models.CharField(max_length=255)
+    passenger_first_name = models.CharField(
+        max_length=255, verbose_name="first_name"
+    )
+    passenger_last_name = models.CharField(
+        max_length=255, verbose_name="last_name"
+    )
     seat_letter = models.CharField(max_length=7, choices=SEAT_CHOICES)
     row = models.IntegerField(validators=[MinValueValidator(1)])
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
