@@ -217,7 +217,9 @@ class Ticket(models.Model):
     seat_letter = models.CharField(max_length=7, choices=SEAT_CHOICES)
     row = models.IntegerField(validators=[MinValueValidator(1)])
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="tickets"
+    )
 
     @property
     def seat(self):
