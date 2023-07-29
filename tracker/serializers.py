@@ -13,7 +13,6 @@ from tracker.models import (
     Flight,
     Ticket,
     Facility,
-    Passenger,
 )
 
 

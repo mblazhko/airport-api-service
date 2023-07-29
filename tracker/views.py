@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from django.db.models import Q
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 
@@ -15,7 +14,6 @@ from tracker.models import (
     AirplaneType,
     Order,
     Flight,
-    Passenger,
     Ticket,
 )
 from tracker.serializers import (
