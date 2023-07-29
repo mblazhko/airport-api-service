@@ -11,7 +11,6 @@ from tracker.views import (
     AirplaneTypeViewSet,
     OrderViewSet,
     FlightViewSet,
-    PassengerViewSet,
     TicketViewSet,
     FacilityViewSet,
 )
@@ -27,7 +26,6 @@ router.register("airplanes", AirplaneViewSet)
 router.register("airplane_types", AirplaneTypeViewSet)
 router.register("orders", OrderViewSet)
 router.register("flights", FlightViewSet)
-router.register("passengers", PassengerViewSet)
 router.register("tickets", TicketViewSet)
 
 urlpatterns = [path("", include(router.urls))]

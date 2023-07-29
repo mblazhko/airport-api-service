@@ -37,7 +37,6 @@ from tracker.serializers import (
     FlightSerializer,
     FlightListSerializer,
     FlightDetailSerializer,
-    PassengerSerializer,
     TicketSerializer,
     TicketDetailSerializer,
     TicketListSerializer,
@@ -67,6 +66,7 @@ class CrewViewSet(
             queryset = queryset.filter(position=position)
 
         return queryset.distinct()
+
 
 class CountryViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
@@ -104,6 +104,7 @@ class CityViewSet(
             queryset = queryset.filter(country=country)
 
         return queryset.distinct()
+
 
 class FacilityViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
@@ -151,9 +152,7 @@ class AirportViewSet(
             queryset = queryset.filter(facilities__id__in=facilities_ids)
 
         if closest_big_city:
-            queryset = queryset.filter(
-                closest_big_city__name=closest_big_city
-            )
+            queryset = queryset.filter(closest_big_city__name=closest_big_city)
 
         return queryset.distinct()
 
@@ -201,6 +200,7 @@ class AirplaneViewSet(
     def _params_to_ints(qs) -> list[int]:
         """Converts a list of string IDs to a list of integers"""
         return [int(str_id) for str_id in qs.split(",")]
+
     def get_serializer_class(self):
         if self.action == "list":
             return AirplaneListSerializer
@@ -223,9 +223,7 @@ class AirplaneViewSet(
             queryset = queryset.filter(facilities__id__in=facilities_ids)
 
         if airplane_type:
-            queryset = queryset.filter(
-                airplane_type__name=airplane_type
-            )
+            queryset = queryset.filter(airplane_type__name=airplane_type)
 
         return queryset.distinct()
 
@@ -254,9 +252,9 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         date = self.request.query_params.get("date")
-        
+
         queryset = self.queryset
-        
+
         if date:
             date = datetime.strptime(date, "%Y-%m-%d").date()
             queryset = queryset.filter(created_at__date=date)
@@ -287,7 +285,6 @@ class FlightViewSet(
         departure_time = self.request.query_params.get("departure_time")
         arrival_time = self.request.query_params.get("arrival_time")
 
-
         queryset = self.queryset
 
         if departure_time:
@@ -308,28 +305,6 @@ class FlightViewSet(
         return FlightSerializer
 
 
-class PassengerViewSet(
-    viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
-):
-    queryset = Passenger.objects.all()
-    serializer_class = PassengerSerializer
-
-    def get_queryset(self):
-        first_name = self.request.query_params.get("first_name")
-        last_name = self.request.query_params.get("last_name")
-
-
-        queryset = self.queryset
-
-        if first_name:
-            queryset = queryset.filter(first_name=first_name)
-
-        if last_name:
-            queryset = queryset.filter(last_name=last_name)
-
-        return queryset.distinct()
-
-
 class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
@@ -346,8 +321,8 @@ class TicketViewSet(viewsets.ModelViewSet):
 
         if passenger:
             queryset = queryset.filter(
-                Q(passenger__first_name=passenger) |
-                Q(passenger__last_name=passenger)
+                Q(passenger__first_name=passenger)
+                | Q(passenger__last_name=passenger)
             )
 
         return queryset.distinct()

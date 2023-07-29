@@ -128,12 +128,6 @@ class AirplaneDetailSerializer(AirplaneSerializer):
         )
 
 
-class PassengerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Passenger
-        fields = ("id", "first_name", "last_name")
-
-
 class FlightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flight
@@ -179,13 +173,21 @@ class FlightDetailSerializer(FlightSerializer):
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
-        fields = ("id", "passenger", "row", "seat_letter", "flight", "order")
+        fields = (
+            "id",
+            "passenger_first_name",
+            "passenger_last_name",
+            "row",
+            "seat_letter",
+            "flight",
+            "order",
+        )
 
 
 class TicketListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
-        fields = ("id", "passenger", "seat", "flight", "order")
+        fields = ("id", "full_name", "seat", "flight", "order")
 
 
 class TicketDetailSerializer(TicketSerializer):
@@ -211,7 +213,6 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(OrderSerializer):
-
     class Meta:
         model = Order
         fields = ("id", "created_at", "tickets")

@@ -163,14 +163,6 @@ class Flight(models.Model):
         ordering = ["departure_time"]
 
 
-class Passenger(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
-
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
@@ -213,13 +205,19 @@ class Ticket(models.Model):
         ("Y", "Y"),
         ("Z", "Z"),
     )
-    passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
+    # passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
+    passenger_first_name = models.CharField(max_length=255)
+    passenger_last_name = models.CharField(max_length=255)
     seat_letter = models.CharField(max_length=7, choices=SEAT_CHOICES)
     row = models.IntegerField(validators=[MinValueValidator(1)])
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, related_name="tickets"
     )
+
+    @property
+    def full_name(self):
+        return f"{self.passenger_first_name} {self.passenger_last_name}"
 
     @property
     def seat(self):
