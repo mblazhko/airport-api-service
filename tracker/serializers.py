@@ -179,6 +179,12 @@ class FlightDetailSerializer(FlightSerializer):
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
+        fields = ("id", "passenger", "row", "seat_letter", "flight")
+
+
+class TicketListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
         fields = ("id", "passenger", "seat", "flight")
 
 
@@ -203,13 +209,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(OrderSerializer):
-    tickets_quantity = serializers.IntegerField(
-        source="tickets.count", read_only=True
-    )
 
     class Meta:
         model = Order
-        fields = ("id", "created_at", "tickets_quantity")
+        fields = ("id", "created_at", "tickets")
 
 
 class OrderDetailSerializer(OrderSerializer):
