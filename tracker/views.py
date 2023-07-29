@@ -42,11 +42,6 @@ from tracker.serializers import (
 )
 
 
-def params_to_ints(qs) -> list[int]:
-    """Converts a list of string IDs to a list of integers"""
-    return [int(str_id) for str_id in qs.split(",")]
-
-
 class CrewViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
 ):
@@ -61,13 +56,13 @@ class CrewViewSet(
         queryset = self.queryset
 
         if first_name:
-            queryset = queryset.filter(first_name__icontains=first_name)
+            queryset = queryset.filter(first_name=first_name)
 
         if last_name:
-            queryset = queryset.filter(last_name__icontains=last_name)
+            queryset = queryset.filter(last_name=last_name)
 
         if position:
-            queryset = queryset.filter(position__icontains=position)
+            queryset = queryset.filter(position=position)
 
         return queryset.distinct()
 
@@ -83,7 +78,7 @@ class CountryViewSet(
         queryset = self.queryset
 
         if name:
-            queryset = queryset.filter(name__icontains=name)
+            queryset = queryset.filter(name=name)
 
         return queryset.distinct()
 
@@ -101,7 +96,7 @@ class CityViewSet(
         queryset = self.queryset
 
         if name:
-            queryset = queryset.filter(name__icontains=name)
+            queryset = queryset.filter(name=name)
 
         if country:
             queryset = queryset.filter(country=country)
@@ -134,6 +129,11 @@ class AirportViewSet(
     queryset = Airport.objects.all()
     serializer_class = AirportSerializer
 
+    @staticmethod
+    def _params_to_ints(qs) -> list[int]:
+        """Converts a list of string IDs to a list of integers"""
+        return [int(str_id) for str_id in qs.split(",")]
+
     def get_queryset(self):
         name = self.request.query_params.get("name")
         facilities = self.request.query_params.get("facilities")
@@ -145,7 +145,7 @@ class AirportViewSet(
             queryset = queryset.filter(name__icontains=name)
 
         if facilities:
-            facilities_ids = params_to_ints(facilities)
+            facilities_ids = self._params_to_ints(facilities)
             queryset = queryset.filter(facilities__id__in=facilities_ids)
 
         if closest_big_city:
@@ -176,11 +176,11 @@ class RouteViewSet(
         queryset = self.queryset
 
         if source:
-            queryset = queryset.filter(source__closest_big_city=source)
+            queryset = queryset.filter(source__closest_big_city__name=source)
 
         if destination:
             queryset = queryset.filter(
-                destination__closest_big_city=destination
+                destination__closest_big_city__name=destination
             )
 
         return queryset.distinct()
@@ -195,6 +195,10 @@ class AirplaneViewSet(
     queryset = Airplane.objects.all()
     serializer_class = AirplaneSerializer
 
+    @staticmethod
+    def _params_to_ints(qs) -> list[int]:
+        """Converts a list of string IDs to a list of integers"""
+        return [int(str_id) for str_id in qs.split(",")]
     def get_serializer_class(self):
         if self.action == "list":
             return AirplaneListSerializer
@@ -213,12 +217,12 @@ class AirplaneViewSet(
             queryset = queryset.filter(name__icontains=name)
 
         if facilities:
-            facilities_ids = params_to_ints(facilities)
+            facilities_ids = self._params_to_ints(facilities)
             queryset = queryset.filter(facilities__id__in=facilities_ids)
 
         if airplane_type:
             queryset = queryset.filter(
-                airplane_type__name__icontains=airplane_type
+                airplane_type__name=airplane_type
             )
 
         return queryset.distinct()
