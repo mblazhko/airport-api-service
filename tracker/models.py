@@ -69,6 +69,13 @@ class Route(models.Model):
     )
     distance = models.IntegerField()
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source", "destination"], name="unique_route"
+            )
+        ]
+
     @property
     def full_way(self):
         return f"From {self.source.name} to {self.destination.name}"
