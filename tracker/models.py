@@ -218,6 +218,14 @@ class Ticket(models.Model):
         Order, on_delete=models.CASCADE, related_name="tickets"
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["row", "seat_letter", "flight"],
+                name="unique_ticket",
+            )
+        ]
+
     @property
     def full_name(self):
         return f"{self.passenger_first_name} {self.passenger_last_name}"
