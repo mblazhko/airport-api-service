@@ -312,18 +312,15 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         seat = self.request.query_params.get("seat")
-        passenger = self.request.query_params.get("passenger")
+        full_name = self.request.query_params.get("full_name")
 
         queryset = self.queryset
 
         if seat:
             queryset = queryset.filter(seat=seat)
 
-        if passenger:
-            queryset = queryset.filter(
-                Q(passenger__first_name=passenger)
-                | Q(passenger__last_name=passenger)
-            )
+        if full_name:
+            queryset = queryset.filter(full_name__icontains=full_name)
 
         return queryset.distinct()
 
