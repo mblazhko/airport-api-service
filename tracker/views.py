@@ -40,6 +40,7 @@ from tracker.serializers import (
     PassengerSerializer,
     TicketSerializer,
     TicketDetailSerializer,
+    TicketListSerializer,
 )
 
 
@@ -352,6 +353,8 @@ class TicketViewSet(viewsets.ModelViewSet):
         return queryset.distinct()
 
     def get_serializer_class(self):
+        if self.action == "list":
+            return TicketListSerializer
         if self.action == "retrieve":
             return TicketDetailSerializer
         return TicketSerializer
