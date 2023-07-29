@@ -11,7 +11,6 @@ from tracker.models import (
     Order,
     Flight,
     Ticket,
-    Passenger,
     Facility,
 )
 
@@ -25,5 +24,4 @@ admin.site.register(Airplane)
 admin.site.register(Order)
 admin.site.register(Flight)
 admin.site.register(Ticket)
-admin.site.register(Passenger)
 admin.site.register(Facility)
