@@ -13,6 +13,7 @@ from tracker.models import (
     Flight,
     Ticket,
     Facility,
+    Passenger,
 )
 
 
@@ -129,7 +130,7 @@ class AirplaneDetailSerializer(AirplaneSerializer):
 
 class PassengerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Crew
+        model = Passenger
         fields = ("id", "first_name", "last_name")
 
 
