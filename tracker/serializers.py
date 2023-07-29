@@ -183,7 +183,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
 
 class TicketDetailSerializer(TicketSerializer):
-    flight = FlightSerializer(many=False, read_only=True)
+    flight = FlightListSerializer(many=False, read_only=True)
 
 
 class OrderSerializer(serializers.ModelSerializer):
