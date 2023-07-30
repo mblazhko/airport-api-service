@@ -143,7 +143,7 @@ class AirportViewSet(
         queryset = self.queryset
 
         if name:
-            queryset = queryset.filter(name__icontains=name)
+            queryset = queryset.filter(name=name)
 
         if facilities:
             facilities_ids = self._params_to_ints(facilities)
