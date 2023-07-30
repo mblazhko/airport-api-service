@@ -99,7 +99,7 @@ class CityViewSet(
             queryset = queryset.filter(name=name)
 
         if country:
-            queryset = queryset.filter(country=country)
+            queryset = queryset.filter(country__id=country)
 
         return queryset.distinct()
 
