@@ -96,7 +96,7 @@ class AdminCrewApiTest(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_create_movie(self):
+    def test_create_crew(self):
         payload = {
             "first_name": "Henry",
             "last_name": "Jackson",
