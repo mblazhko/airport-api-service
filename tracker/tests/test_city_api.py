@@ -94,7 +94,6 @@ class AdminCrewApiTest(TestCase):
         }
 
         res = self.client.post(CITY_URL, payload)
-        print("Response data:", res.data)
         city = City.objects.get(id=res.data["id"])
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)

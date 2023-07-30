@@ -92,8 +92,6 @@ class AuthenticatedAirportApiTests(TestCase):
         res = self.client.get(url)
 
         serializer = AirportDetailSerializer(airport)
-        print(serializer.data)
-        print(res.data)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
