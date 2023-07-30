@@ -88,7 +88,6 @@ def sample_airplane(**params):
         "rows": 30,
         "seat_in_row": 6,
         "seat_letters": ["A", "B", "C", "D", "E", "F"],
-        "facilities": sample_facility(),
         "airplane_type": sample_airplane_type,
     }
     defaults.update(params)
