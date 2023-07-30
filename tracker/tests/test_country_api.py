@@ -3,9 +3,10 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
+
 from tracker.models import Country
-from tracker.tests.model_samples import sample_country
 from tracker.serializers import CountrySerializer
+from tracker.tests.model_samples import sample_country
 
 COUNTRY_URL = reverse("tracker:country-list")
 
@@ -19,7 +20,7 @@ class UnauthenticatedCountryApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class AuthenticatedCrewApiTests(TestCase):
+class AuthenticatedCountryApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
@@ -28,7 +29,7 @@ class AuthenticatedCrewApiTests(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_list_crew(self):
+    def test_list_country(self):
         sample_country()
         res = self.client.get(COUNTRY_URL)
 
@@ -59,7 +60,7 @@ class AuthenticatedCrewApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class AdminCrewApiTest(TestCase):
+class AdminCountryApiTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
@@ -69,14 +70,14 @@ class AdminCrewApiTest(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_create_movie(self):
+    def test_create_country(self):
         payload = {
             "name": "Poland",
         }
 
         res = self.client.post(COUNTRY_URL, payload)
-        movie = Country.objects.get(id=res.data["id"])
+        country = Country.objects.get(id=res.data["id"])
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         for key in payload:
-            self.assertEqual(payload[key], getattr(movie, key))
+            self.assertEqual(payload[key], getattr(country, key))
