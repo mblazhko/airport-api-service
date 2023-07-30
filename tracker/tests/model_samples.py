@@ -62,12 +62,14 @@ def sample_airport(**params):
 
 
 def sample_route(**params):
+    source = sample_airport()
+    destination = sample_airport(
+        name="LWO",
+        closest_big_city=sample_city(name="Lviv"),
+    )
     defaults = {
-        "source": sample_airport(),
-        "destination": sample_airport(
-            name="LWO",
-            city=sample_city(name="Lviv", country=sample_country()),
-        ),
+        "source": source,
+        "destination": destination,
         "distance": 700,
     }
     defaults.update(params)
