@@ -33,8 +33,8 @@ class AuthenticatedCountryApiTests(TestCase):
         sample_country()
         res = self.client.get(COUNTRY_URL)
 
-        crew = Country.objects.all()
-        serializer = CountrySerializer(crew, many=True)
+        country = Country.objects.all()
+        serializer = CountrySerializer(country, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
