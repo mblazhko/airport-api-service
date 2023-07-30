@@ -114,7 +114,7 @@ class AuthenticatedAirplaneApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class AdminCrewApiTest(TestCase):
+class AdminAirplaneApiTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
