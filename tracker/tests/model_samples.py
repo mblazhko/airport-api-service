@@ -86,9 +86,9 @@ def sample_airplane(**params):
     defaults = {
         "name": "747-200",
         "rows": 30,
-        "seat_in_row": 6,
+        "seats_in_row": 6,
         "seat_letters": ["A", "B", "C", "D", "E", "F"],
-        "airplane_type": sample_airplane_type,
+        "airplane_type": sample_airplane_type(),
     }
     defaults.update(params)
     return Airplane.objects.create(**defaults)
