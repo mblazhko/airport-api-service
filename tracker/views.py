@@ -207,7 +207,7 @@ class AirplaneViewSet(
         return AirplaneSerializer
 
     def get_queryset(self):
-        name = self.request.query_params.get("source")
+        name = self.request.query_params.get("name")
         facilities = self.request.query_params.get("facilities")
         airplane_type = self.request.query_params.get("airplane_type")
 
