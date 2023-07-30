@@ -100,7 +100,6 @@ def sample_flight(**params):
         "airplane": sample_airplane(),
         "departure_time": "2020-01-01T00:00:00",
         "arrival_time": "2020-01-03T00:00:00",
-        "crews": [sample_crew()],
         "terminal": "D",
         "gate": 10,
     }
