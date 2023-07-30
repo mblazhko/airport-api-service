@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from tracker.models import (
     Crew,
     Country,
@@ -11,6 +13,10 @@ from tracker.models import (
     Order,
     Ticket,
 )
+
+
+def detail_url(id, api_name):
+    return reverse(f"tracker:{api_name}-detail", args=[id])
 
 
 def sample_crew(**params):
@@ -44,11 +50,15 @@ def sample_facility(**params):
 def sample_airport(**params):
     defaults = {
         "name": "KBP",
-        "facilities": sample_facility(),
-        "city": sample_city(),
+        "closest_big_city": sample_city(),
     }
     defaults.update(params)
-    return Airport.objects.create(**defaults)
+    airport = Airport.objects.create(**defaults)
+
+    if "facilities" in defaults:
+        airport.facilities.set(defaults["facilities"])
+
+    return airport
 
 
 def sample_route(**params):
