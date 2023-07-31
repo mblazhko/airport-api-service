@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.urls import reverse
 
 from tracker.models import (
@@ -13,6 +15,8 @@ from tracker.models import (
     Order,
     Ticket,
 )
+
+from tracker.views import OrderViewSet
 
 
 def detail_url(id, api_name):
@@ -105,3 +109,20 @@ def sample_flight(**params):
     }
     defaults.update(params)
     return Flight.objects.create(**defaults)
+
+def sample_order(**params):
+    defaults = {
+    }
+    defaults.update(params)
+    return Order.objects.create(**defaults)
+
+def sample_ticket(**params):
+    defaults = {
+        "passenger_first_name": "John",
+        "passenger_last_name": "Doe",
+        "seat_letter": "A",
+        "row": 1,
+        "flight": sample_flight(),
+    }
+    defaults.update(params)
+    return Ticket.objects.create(**defaults)
