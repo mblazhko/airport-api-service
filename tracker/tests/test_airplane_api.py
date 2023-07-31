@@ -1,3 +1,7 @@
+import os
+import tempfile
+
+from PIL import Image
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -152,3 +156,86 @@ class AdminAirplaneApiTest(TestCase):
                 )
             else:
                 self.assertEqual(payload[key], getattr(airplane, key))
+
+
+def image_upload_url(airplane_id):
+    return reverse("tracker:airplane-upload-image", args=[airplane_id])
+
+
+class AirplaneImageUploadTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = get_user_model().objects.create_superuser(
+            "admin@admin.com", "password"
+        )
+        self.client.force_authenticate(self.user)
+        self.airplane = sample_airplane()
+
+
+    def tearDown(self):
+        self.airplane.image.delete()
+
+    def test_upload_image_to_airplane(self):
+        url = image_upload_url(self.airplane.id)
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as ntf:
+            img = Image.new("RGB", (10, 10))
+            img.save(ntf, format="JPEG")
+            ntf.seek(0)
+            res = self.client.post(url, {"image": ntf}, format="multipart")
+        self.airplane.refresh_from_db()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn("image", res.data)
+        self.assertTrue(os.path.exists(self.airplane.image.path))
+
+    def test_upload_image_bad_request(self):
+        url = image_upload_url(self.airplane.id)
+        res = self.client.post(url, {"image": "not image"}, format="multipart")
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_image_to_airplane_list(self):
+        url = AIRPLANE_URL
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as ntf:
+            img = Image.new("RGB", (10, 10))
+            img.save(ntf, format="JPEG")
+            ntf.seek(0)
+            res = self.client.post(
+                url,
+                {
+                    "name": "310",
+                    "rows": 30,
+                    "seats_in_row": 6,
+                    "seat_letters": ["A", "B", "C", "D", "E", "F"],
+                    "airplane_type": sample_airplane_type().id,
+                    "facilities": [sample_facility().id],
+                    "image": ntf,
+                },
+                format="multipart",
+            )
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        movie = Airplane.objects.get(name="310")
+        self.assertFalse(movie.image)
+
+    def test_image_url_is_shown_on_airplane_detail(self):
+        url = image_upload_url(self.airplane.id)
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as ntf:
+            img = Image.new("RGB", (10, 10))
+            img.save(ntf, format="JPEG")
+            ntf.seek(0)
+            self.client.post(url, {"image": ntf}, format="multipart")
+        res = self.client.get(detail_url(self.airplane.id, "airplane"))
+
+        self.assertIn("image", res.data)
+
+    def test_image_url_is_shown_on_airplane_list(self):
+        url = image_upload_url(self.airplane.id)
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as ntf:
+            img = Image.new("RGB", (10, 10))
+            img.save(ntf, format="JPEG")
+            ntf.seek(0)
+            self.client.post(url, {"image": ntf}, format="multipart")
+        res = self.client.get(AIRPLANE_URL)
+
+        self.assertIn("image", res.data[0].keys())
