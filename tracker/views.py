@@ -14,7 +14,6 @@ from tracker.models import (
     AirplaneType,
     Order,
     Flight,
-    Ticket,
 )
 from tracker.serializers import (
     CrewSerializer,
@@ -35,9 +34,7 @@ from tracker.serializers import (
     FlightSerializer,
     FlightListSerializer,
     FlightDetailSerializer,
-    TicketSerializer,
-    TicketDetailSerializer,
-    TicketListSerializer,
+    # TicketDetailSerializer,
 )
 
 
@@ -301,30 +298,3 @@ class FlightViewSet(
         if self.action == "retrieve":
             return FlightDetailSerializer
         return FlightSerializer
-
-
-class TicketViewSet(viewsets.ModelViewSet):
-    queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_queryset(self):
-        seat = self.request.query_params.get("seat")
-        full_name = self.request.query_params.get("full_name")
-
-        queryset = self.queryset
-
-        if seat:
-            queryset = queryset.filter(seat=seat)
-
-        if full_name:
-            queryset = queryset.filter(full_name__icontains=full_name)
-
-        return queryset.distinct()
-
-    def get_serializer_class(self):
-        if self.action == "list":
-            return TicketListSerializer
-        if self.action == "retrieve":
-            return TicketDetailSerializer
-        return TicketSerializer
