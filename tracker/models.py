@@ -1,7 +1,11 @@
+import os
+import uuid
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils.text import slugify
 from multiselectfield import MultiSelectField
 
 
@@ -51,10 +55,18 @@ class Facility(models.Model):
         verbose_name_plural = "Facilities"
 
 
+def movie_image_file_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
+
+    return os.path.join("uploads/movies/", filename)
+
+
 class Airport(models.Model):
     name = models.CharField(max_length=255)
     facilities = models.ManyToManyField(Facility, related_name="airports")
     closest_big_city = models.ForeignKey(City, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, upload_to=movie_image_file_path)
 
     def __str__(self):
         return f"{self.name}({self.closest_big_city.name})"
@@ -130,6 +142,7 @@ class Airplane(models.Model):
     )
     facilities = models.ManyToManyField(Facility, related_name="airplanes")
     airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, upload_to=movie_image_file_path)
 
     @property
     def capacity(self):
