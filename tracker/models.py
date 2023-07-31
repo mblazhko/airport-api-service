@@ -66,7 +66,7 @@ class Airport(models.Model):
     name = models.CharField(max_length=255)
     facilities = models.ManyToManyField(Facility, related_name="airports")
     closest_big_city = models.ForeignKey(City, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, upload_to=movie_image_file_path)
+    image = models.ImageField(null=True, blank=True, upload_to=movie_image_file_path)
 
     def __str__(self):
         return f"{self.name}({self.closest_big_city.name})"
@@ -142,7 +142,7 @@ class Airplane(models.Model):
     )
     facilities = models.ManyToManyField(Facility, related_name="airplanes")
     airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, upload_to=movie_image_file_path)
+    image = models.ImageField(null=True, blank=True, upload_to=movie_image_file_path)
 
     @property
     def capacity(self):
