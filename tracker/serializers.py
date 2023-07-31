@@ -133,6 +133,12 @@ class AirplaneDetailSerializer(AirplaneSerializer):
         )
 
 
+class AirplaneImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Airplane
+        fields = ("id", "image")
+
+
 class FlightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flight
