@@ -36,6 +36,7 @@ Below is a list of available endpoints and their functionalities:
 - `POST /api/airports/`: Create a new airport.
 - `GET /api/airports/?name=<name>&facilities=<facility_ids>&closest_big_city=<city_name>`: Filter airports by name, facilities, and closest big city.
 - `GET /api/airports/<airport_id>/`: Retrieve details of a specific airport.
+- `POST /api/airports/<airport_id>/upload-image/`: Upload an image for a specific airport (Admins only).
 
 ### Routes
 
@@ -55,6 +56,7 @@ Below is a list of available endpoints and their functionalities:
 - `POST /api/airplanes/`: Create a new airplane.
 - `GET /api/airplanes/?name=<name>&facilities=<facility_ids>&airplane_type=<airplane_type>`: Filter airplanes by name, facilities, and airplane type.
 - `GET /api/airplanes/<airplane_id>/`: Retrieve details of a specific airplane.
+- `POST /api/airplanes/<airplane_id>/upload-image/`: Upload an image for a specific airplane (Admins only).
 
 ### Flights
 
