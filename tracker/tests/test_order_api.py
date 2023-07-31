@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
+from rest_framework.utils import json
 
 from tracker.models import Order
 from tracker.serializers import (
@@ -91,15 +92,26 @@ class AuthenticatedAirplaneApiTests(TestCase):
             ],
         }
 
-        res = self.client.post(ORDER_URL, payload)
+        res = self.client.post(ORDER_URL, json.dumps(payload), content_type="application/json")
 
         self.assertIn("id", res.data, f"Response data: {res.data}")
 
         order = Order.objects.get(id=res.data["id"])
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        for idx, ticket_payload in enumerate(payload["tickets"]):
+            ticket = order.tickets.all()[idx]
+            for key in ticket_payload:
+                if key == "flight":
+                    self.assertEqual(ticket_payload[key], ticket.flight.id)
+                else:
+                    self.assertEqual(ticket_payload[key], getattr(ticket, key))
+
         for key in payload:
-            if key == "flight":
-                self.assertEqual(payload[key], getattr(order, key).id)
+            if key == "tickets":
+                continue
+            elif key == "user":
+                self.assertEqual(payload[key], order.user.id)
             else:
                 self.assertEqual(payload[key], getattr(order, key))
