@@ -56,7 +56,14 @@ class AirportListSerializer(AirportSerializer):
 
     class Meta:
         model = Airport
-        fields = ("id", "name", "country", "closest_big_city", "facilities", "image")
+        fields = (
+            "id",
+            "name",
+            "country",
+            "closest_big_city",
+            "facilities",
+            "image",
+        )
 
 
 class AirportDetailSerializer(AirportSerializer):
@@ -67,7 +74,14 @@ class AirportDetailSerializer(AirportSerializer):
 
     class Meta:
         model = Airport
-        fields = ("id", "name", "country", "closest_big_city", "facilities", "image")
+        fields = (
+            "id",
+            "name",
+            "country",
+            "closest_big_city",
+            "facilities",
+            "image",
+        )
 
 
 class AirportImageSerializer(serializers.ModelSerializer):
@@ -113,7 +127,14 @@ class AirplaneListSerializer(AirplaneSerializer):
 
     class Meta:
         model = Airplane
-        fields = ("id", "name", "capacity", "airplane_type", "facilities", "image")
+        fields = (
+            "id",
+            "name",
+            "capacity",
+            "airplane_type",
+            "facilities",
+            "image",
+        )
 
 
 class AirplaneDetailSerializer(AirplaneSerializer):
@@ -202,9 +223,7 @@ class TicketListSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    tickets = TicketSerializer(
-        many=True, read_only=False, allow_empty=False
-    )
+    tickets = TicketSerializer(many=True, read_only=False, allow_empty=False)
 
     class Meta:
         model = Order
@@ -220,7 +239,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(OrderSerializer):
-    tickets = serializers.SlugRelatedField(many=True, read_only=True, slug_field="seat")
+    tickets = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="seat"
+    )
+
     class Meta:
         model = Order
         fields = ("id", "created_at", "tickets")
@@ -230,6 +252,7 @@ class OrderDetailSerializer(OrderSerializer):
     tickets = TicketListSerializer(
         many=True, read_only=False, allow_empty=False
     )
+
     class Meta:
         model = Order
         fields = ("id", "created_at", "tickets")

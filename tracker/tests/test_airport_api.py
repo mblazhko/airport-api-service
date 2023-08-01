@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from tracker.models import Airport, Airplane
+from tracker.models import Airport
 from tracker.serializers import AirportListSerializer, AirportDetailSerializer
 from tracker.tests.model_samples import (
     sample_airport,
@@ -78,7 +78,9 @@ class AuthenticatedAirportApiTests(TestCase):
 
     def test_filter_by_closest_big_city(self):
         airport1 = sample_airport()
-        airport2 = sample_airport(name="LWO", closest_big_city=sample_city(name="Lviv"))
+        airport2 = sample_airport(
+            name="LWO", closest_big_city=sample_city(name="Lviv")
+        )
 
         res = self.client.get(AIRPORT_URL, {"closest_big_city": "Kyiv"})
 
@@ -136,7 +138,9 @@ class AdminCrewApiTest(TestCase):
             if key == "closest_big_city":
                 self.assertEqual(payload[key], getattr(airport, key).id)
             elif key == "facilities":
-                facility_ids = list(airport.facilities.values_list("id", flat=True))
+                facility_ids = list(
+                    airport.facilities.values_list("id", flat=True)
+                )
                 self.assertEqual(payload[key], facility_ids)
             else:
                 self.assertEqual(payload[key], getattr(airport, key))
@@ -154,7 +158,6 @@ class AirportImageUploadTests(TestCase):
         )
         self.client.force_authenticate(self.user)
         self.airport = sample_airport()
-
 
     def tearDown(self):
         self.airport.image.delete()

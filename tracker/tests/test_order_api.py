@@ -92,7 +92,9 @@ class AuthenticatedAirplaneApiTests(TestCase):
             ],
         }
 
-        res = self.client.post(ORDER_URL, json.dumps(payload), content_type="application/json")
+        res = self.client.post(
+            ORDER_URL, json.dumps(payload), content_type="application/json"
+        )
 
         self.assertIn("id", res.data, f"Response data: {res.data}")
 

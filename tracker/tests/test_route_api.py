@@ -4,8 +4,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from tracker.models import Airport, Route
-from tracker.serializers import AirportListSerializer, RouteSerializer
+from tracker.models import Route
+from tracker.serializers import RouteSerializer
 from tracker.tests.model_samples import (
     sample_airport,
     sample_city,
@@ -74,7 +74,6 @@ class AuthenticatedRouteApiTests(TestCase):
 
         self.assertIn(serializer1.data, res.data)
         self.assertNotIn(serializer2.data, res.data)
-
 
     def test_create_route_forbidden(self):
         payload = {

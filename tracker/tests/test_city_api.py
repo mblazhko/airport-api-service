@@ -67,10 +67,7 @@ class AuthenticatedCityApiTests(TestCase):
         self.assertNotIn(serializer2.data, res.data)
 
     def test_create_city_forbidden(self):
-        payload = {
-            "name": "Lviv",
-            "country": sample_country().id
-        }
+        payload = {"name": "Lviv", "country": sample_country().id}
 
         res = self.client.post(CITY_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
@@ -85,7 +82,6 @@ class AdminCrewApiTest(TestCase):
             is_staff=True,
         )
         self.client.force_authenticate(self.user)
-
 
     def test_create_city(self):
         payload = {

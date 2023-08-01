@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from django.db.models import Prefetch
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -38,7 +37,7 @@ from tracker.serializers import (
     FlightListSerializer,
     FlightDetailSerializer,
     AirportImageSerializer,
-    AirplaneImageSerializer
+    AirplaneImageSerializer,
 )
 
 
@@ -128,9 +127,8 @@ class AirportViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
 ):
-    queryset = (
-        Airport.objects.all()
-        .prefetch_related("closest_big_city__country", "facilities")
+    queryset = Airport.objects.all().prefetch_related(
+        "closest_big_city__country", "facilities"
     )
     serializer_class = AirportSerializer
 
@@ -175,11 +173,11 @@ class AirportViewSet(
     def upload_image(self, request, pk=None):
         airport = self.get_object()
         serializer = self.get_serializer(airport, data=request.data)
-    
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -257,12 +255,13 @@ class AirplaneViewSet(
     def upload_image(self, request, pk=None):
         airplane = self.get_object()
         serializer = self.get_serializer(airplane, data=request.data)
-    
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AirplaneTypeViewSet(
     viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
@@ -285,7 +284,7 @@ class OrderViewSet(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin
+    mixins.RetrieveModelMixin,
 ):
     queryset = Order.objects.all().prefetch_related("tickets")
     serializer_class = OrderSerializer

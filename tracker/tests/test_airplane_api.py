@@ -171,7 +171,6 @@ class AirplaneImageUploadTests(TestCase):
         self.client.force_authenticate(self.user)
         self.airplane = sample_airplane()
 
-
     def tearDown(self):
         self.airplane.image.delete()
 
