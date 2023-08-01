@@ -75,7 +75,7 @@ Below is a list of available endpoints and their functionalities:
 
 ## Local deployment instruction
 
-To deploy the Task Manager project locally, please follow the steps below:
+To deploy the Airport API Service locally, please follow the steps below:
 
 1. Clone the repository to your local machine:
    ```git clone https://github.com/neostyle88/airport-api-service.git```
@@ -105,7 +105,7 @@ To deploy the Task Manager project locally, please follow the steps below:
 
 You can use test admin user made during migration:
 
-   - Username ```admin```
+   - Email ```admin@admin.com```
    - Password ```testpass123```
 
 ---
