@@ -105,7 +105,7 @@ To deploy the Airport API Service locally, please follow the steps below:
 
 You can use test admin user made during migration:
 
-   - Email ```admin@admin.com```
+   - Email ```test@admin.com```
    - Password ```testpass123```
 
 ---
