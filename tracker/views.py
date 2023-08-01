@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db.models import Prefetch
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -127,7 +128,10 @@ class AirportViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
 ):
-    queryset = Airport.objects.all()
+    queryset = (
+        Airport.objects.all()
+        .prefetch_related("closest_big_city__country", "facilities")
+    )
     serializer_class = AirportSerializer
 
     @staticmethod
