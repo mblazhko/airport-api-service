@@ -283,7 +283,7 @@ class OrderViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin
 ):
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().prefetch_related("tickets")
     serializer_class = OrderSerializer
     permission_classes = (IsAuthenticated,)
 
