@@ -8,12 +8,10 @@ class UserAPITest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        # Create a regular user
         self.user = get_user_model().objects.create_user(
             email="regular@example.com",
             password="testpassword"
         )
-        # Create a superuser
         self.superuser = get_user_model().objects.create_superuser(
             email="superuser@example.com",
             password="testpassword"
