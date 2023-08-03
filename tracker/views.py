@@ -121,6 +121,10 @@ class FacilityViewSet(
         return queryset.distinct()
 
 
+def params_to_ints(qs) -> list[int]:
+    return [int(str_id) for str_id in qs.split(",")]
+
+
 class AirportViewSet(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
@@ -131,10 +135,6 @@ class AirportViewSet(
         "closest_big_city__country", "facilities"
     )
     serializer_class = AirportSerializer
-
-    @staticmethod
-    def _params_to_ints(qs) -> list[int]:
-        return [int(str_id) for str_id in qs.split(",")]
 
     def get_queryset(self):
         name = self.request.query_params.get("name")
@@ -147,7 +147,7 @@ class AirportViewSet(
             queryset = queryset.filter(name=name)
 
         if facilities:
-            facilities_ids = self._params_to_ints(facilities)
+            facilities_ids = params_to_ints(facilities)
             queryset = queryset.filter(facilities__id__in=facilities_ids)
 
         if closest_big_city:
@@ -174,11 +174,10 @@ class AirportViewSet(
         airport = self.get_object()
         serializer = self.get_serializer(airport, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RouteViewSet(
@@ -213,11 +212,6 @@ class AirplaneViewSet(
     queryset = Airplane.objects.all()
     serializer_class = AirplaneSerializer
 
-    @staticmethod
-    def _params_to_ints(qs) -> list[int]:
-        """Converts a list of string IDs to a list of integers"""
-        return [int(str_id) for str_id in qs.split(",")]
-
     def get_serializer_class(self):
         if self.action == "list":
             return AirplaneListSerializer
@@ -238,7 +232,7 @@ class AirplaneViewSet(
             queryset = queryset.filter(name__icontains=name)
 
         if facilities:
-            facilities_ids = self._params_to_ints(facilities)
+            facilities_ids = params_to_ints(facilities)
             queryset = queryset.filter(facilities__id__in=facilities_ids)
 
         if airplane_type:
@@ -256,11 +250,10 @@ class AirplaneViewSet(
         airplane = self.get_object()
         serializer = self.get_serializer(airplane, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AirplaneTypeViewSet(
