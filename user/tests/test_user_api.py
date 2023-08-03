@@ -4,17 +4,15 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from django.urls import reverse
 
-class UserAPITest(TestCase):
 
+class UserAPITest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
-            email="regular@example.com",
-            password="testpassword"
+            email="regular@example.com", password="testpassword"
         )
         self.superuser = get_user_model().objects.create_superuser(
-            email="superuser@example.com",
-            password="testpassword"
+            email="superuser@example.com", password="testpassword"
         )
 
     def test_create_regular_user(self):
@@ -26,7 +24,10 @@ class UserAPITest(TestCase):
 
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(get_user_model().objects.count(), 3)  # Two users already created in setUp.
+        self.assertIn(
+            get_user_model().objects.get(email="newuser@example.com"),
+            get_user_model().objects.all(),
+        )
 
     def test_create_superuser(self):
         url = reverse("user:create")
@@ -38,7 +39,10 @@ class UserAPITest(TestCase):
         }
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(get_user_model().objects.count(), 3)  # Two users already created in setUp.
+        self.assertIn(
+            get_user_model().objects.get(email="superuser2@example.com"),
+            get_user_model().objects.all(),
+        )
 
     def test_retrieve_user_details_authenticated(self):
         url = reverse("user:manage")
