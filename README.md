@@ -1,6 +1,8 @@
 # Airport API Service
 
-The Airport API Service provides endpoints to manage and query data related to flights, crew members, airplanes, orders, and more. It is built using Django and Django REST Framework.
+The Airport API Service provides endpoints to manage and query data related to
+flights, crew members, airplanes, orders, and more. It is built using Django
+and Django REST Framework.
 
 ## Endpoints
 
@@ -10,7 +12,8 @@ Below is a list of available endpoints and their functionalities:
 
 - `GET /api/crews/`: Retrieve a list of all crew members.
 - `POST /api/crews/`: Create a new crew member.
-- `GET /api/crews/?first_name=<first_name>&last_name=<last_name>&position=<position>`: Filter crew members by first name, last name, and position.
+- `GET /api/crews/?first_name=<first_name>&last_name=<last_name>&position=<position>`:
+  Filter crew members by first name, last name, and position.
 
 ### Countries
 
@@ -22,7 +25,8 @@ Below is a list of available endpoints and their functionalities:
 
 - `GET /api/cities/`: Retrieve a list of all cities.
 - `POST /api/cities/`: Create a new city.
-- `GET /api/cities/?name=<name>&country=<country_id>`: Filter cities by name and country.
+- `GET /api/cities/?name=<name>&country=<country_id>`: Filter cities by name
+  and country.
 
 ### Facilities
 
@@ -34,15 +38,18 @@ Below is a list of available endpoints and their functionalities:
 
 - `GET /api/airports/`: Retrieve a list of all airports.
 - `POST /api/airports/`: Create a new airport.
-- `GET /api/airports/?name=<name>&facilities=<facility_ids>&closest_big_city=<city_name>`: Filter airports by name, facilities, and closest big city.
+- `GET /api/airports/?name=<name>&facilities=<facility_ids>&closest_big_city=<city_name>`:
+  Filter airports by name, facilities, and closest big city.
 - `GET /api/airports/<airport_id>/`: Retrieve details of a specific airport.
-- `POST /api/airports/<airport_id>/upload-image/`: Upload an image for a specific airport (Admins only).
+- `POST /api/airports/<airport_id>/upload-image/`: Upload an image for a
+  specific airport (Admins only).
 
 ### Routes
 
 - `GET /api/routes/`: Retrieve a list of all flight routes.
 - `POST /api/routes/`: Create a new flight route.
-- `GET /api/routes/?source=<source_city>&destination=<destination_city>`: Filter routes by source and destination cities.
+- `GET /api/routes/?source=<source_city>&destination=<destination_city>`:
+  Filter routes by source and destination cities.
 
 ### Airplane Types
 
@@ -54,24 +61,28 @@ Below is a list of available endpoints and their functionalities:
 
 - `GET /api/airplanes/`: Retrieve a list of all airplanes.
 - `POST /api/airplanes/`: Create a new airplane.
-- `GET /api/airplanes/?name=<name>&facilities=<facility_ids>&airplane_type=<airplane_type>`: Filter airplanes by name, facilities, and airplane type.
+- `GET /api/airplanes/?name=<name>&facilities=<facility_ids>&airplane_type=<airplane_type>`:
+  Filter airplanes by name, facilities, and airplane type.
 - `GET /api/airplanes/<airplane_id>/`: Retrieve details of a specific airplane.
-- `POST /api/airplanes/<airplane_id>/upload-image/`: Upload an image for a specific airplane (Admins only).
+- `POST /api/airplanes/<airplane_id>/upload-image/`: Upload an image for a
+  specific airplane (Admins only).
 
 ### Flights
 
 - `GET /api/flights/`: Retrieve a list of all flights.
 - `POST /api/flights/`: Create a new flight.
-- `GET /api/flights/?departure_time=<departure_date>&arrival_time=<arrival_date>`: Filter flights by departure and arrival times.
+- `GET /api/flights/?departure_time=<departure_date>&arrival_time=<arrival_date>`:
+  Filter flights by departure and arrival times.
 - `GET /api/flights/<flight_id>/`: Retrieve details of a specific flight.
 
 ### Orders
 
 - `GET /api/orders/`: Retrieve a list of all orders (authenticated users only).
 - `POST /api/orders/`: Create a new order (authenticated users only).
-- `GET /api/orders/?date=<date>`: Filter orders by creation date (authenticated users only).
-- `GET /api/orders/<order_id>/`: Retrieve details of a specific order (authenticated users only).
-
+- `GET /api/orders/?date=<date>`: Filter orders by creation date (authenticated
+  users only).
+- `GET /api/orders/<order_id>/`: Retrieve details of a specific order (
+  authenticated users only).
 
 ## Local deployment instruction
 
@@ -83,36 +94,30 @@ To deploy the Airport API Service locally, please follow the steps below:
 2. Navigate to the project directory:
    ```cd airport-api-service```
 
-3. Create a virtual environment:
-   ```python -m venv env```
+3. Start docker container using the following command:
+   `docker-compose up --build`
 
-4. Activate the virtual environment:
-   - For Windows:
-   ``` .\env\Scripts\activate```
-   - For macOS and Linux:
-   ```source env/bin/activate```
-
-5. Install the project dependencies:
-   ```pip install -r requirements.txt```
-
-6. Apply database migrations:
-   ```python manage.py migrate```
-
-7. Run the development server:
-   ```python manage.py runserver```
-
-8. Open your web browser and access the Task Manager application at http://localhost:8000/.
+4. Open your web browser and access the Airport API Service application
+   at http://localhost:8000/.
 
 You can use test admin user made during migration:
 
-   - Email ```test@admin.com```
-   - Password ```testpass123```
+- Email ```test@admin.com```
+- Password ```testpass123```
 
 ---
+
 ## Environment Variables
 
->The following environment variables should be set in the `.env` file:
+> The following environment variables should be set in the `.env` file:
 
-- `DJANGO_SECRET_KEY`: Your Django secret key
+- `DJANGO_SECRET_KEY`: DJANGO_SECRET_KEY
+- `POSTGRES_DB`=POSTGRES_DB
+- `POSTGRES_USER`=POSTGRES_USER
+- `POSTGRES_PASSWORD`=POSTGRES_PASSWORD
+- `POSTGRES_HOST`=POSTGRES_HOST
+- `POSTGRES_PORT`=POSTGRES_PORT
 
-**Note:** Before starting the project, make a copy of the `.env_sample` file and rename it to `.env`. Replace the sample values with your actual environment variable values.
+**Note:** Before starting the project, make a copy of the `.env_sample` file
+and rename it to `.env`. Replace the sample values with your actual environment
+variable values.
