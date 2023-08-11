@@ -57,9 +57,12 @@ class Facility(models.Model):
 
 def movie_image_file_path(instance, filename):
     _, extension = os.path.splitext(filename)
+
+    model_type = "airplanes" if isinstance(instance, Airplane) else "airports"
+
     filename = f"{slugify(instance.name)}-{uuid.uuid4()}{extension}"
 
-    return os.path.join("uploads/movies/", filename)
+    return os.path.join(f"uploads/{model_type}/", filename)
 
 
 class Airport(models.Model):
