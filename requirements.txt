@@ -3,6 +3,7 @@ black==23.7.0
 click==8.1.6
 colorama==0.4.6
 Django==4.2.3
+django-debug-toolbar==4.1.0
 django-multiselectfield==0.1.12
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
@@ -13,6 +14,7 @@ packaging==23.1
 pathspec==0.11.1
 Pillow==10.0.0
 platformdirs==3.9.1
+psycopg2-binary==2.9.7
 pycodestyle==2.10.0
 pyflakes==3.0.1
 PyJWT==2.8.0
