@@ -2,7 +2,7 @@
 
 The Airport API Service provides endpoints to manage and query data related to
 flights, crew members, airplanes, orders, and more. It is built using Django
-and Django REST Framework.
+and Django REST Framework. For creating tasks was used Celery library.
 
 ## Endpoints
 
@@ -92,13 +92,15 @@ To deploy the Airport API Service locally, please follow the steps below:
    ```git clone https://github.com/neostyle88/airport-api-service.git```
 
 2. Navigate to the project directory:
-   ```cd airport-api-service```
+   ```cd airport_api_service```
 
 3. Start docker container using the following command:
    `docker-compose up --build`
 
 4. Open your web browser and access the Airport API Service application
    at http://localhost:8000/.
+
+5. Create schedule if you want to get email when flight departs tomorrow
 
 You can use test admin user made during migration:
 
@@ -112,11 +114,18 @@ You can use test admin user made during migration:
 > The following environment variables should be set in the `.env` file:
 
 - `DJANGO_SECRET_KEY`: DJANGO_SECRET_KEY
-- `POSTGRES_DB`=POSTGRES_DB
-- `POSTGRES_USER`=POSTGRES_USER
-- `POSTGRES_PASSWORD`=POSTGRES_PASSWORD
-- `POSTGRES_HOST`=POSTGRES_HOST
-- `POSTGRES_PORT`=POSTGRES_PORT
+- `POSTGRES_DB`: POSTGRES_DB
+- `POSTGRES_USER`: POSTGRES_USER
+- `POSTGRES_PASSWORD`: POSTGRES_PASSWORD
+- `POSTGRES_HOST`: POSTGRES_HOST
+- `POSTGRES_PORT`: POSTGRES_PORT
+- `CELERY_BROKER_URL`: CELERY_BROKER_URL
+- `CELERY_RESULT_BACKEND`: CELERY_RESULT_BACKEND
+- `EMAIL_HOST`: EMAIL_HOST
+- `EMAIL_PORT`: EMAIL_PORT
+- `EMAIL_HOST_USER`: EMAIL_HOST_USER
+- `EMAIL_HOST_PASSWORD`: EMAIL_HOST_PASSWORD
+- `DEFAULT_FROM_EMAIL`: DEFAULT_FROM_EMAIL
 
 **Note:** Before starting the project, make a copy of the `.env_sample` file
 and rename it to `.env`. Replace the sample values with your actual environment
