@@ -32,7 +32,7 @@ class AuthenticatedAirplaneApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
-            email="test@test.com",
+            email="vifidov384@xgh6.com",
             password="testpassword",
         )
         self.client.force_authenticate(self.user)

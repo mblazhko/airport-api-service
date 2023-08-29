@@ -14,6 +14,7 @@ from tracker.models import (
     Ticket,
     Facility,
 )
+from tracker.notifications import send_order_confirmation_email
 
 
 class CrewSerializer(serializers.ModelSerializer):
@@ -235,6 +236,9 @@ class OrderSerializer(serializers.ModelSerializer):
             order = Order.objects.create(**validated_data)
             for ticket_data in tickets_data:
                 Ticket.objects.create(order=order, **ticket_data)
+
+            send_order_confirmation_email(order)
+
             return order
 
 
