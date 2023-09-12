@@ -1,6 +1,6 @@
-# Airport API Service
+# SkyTrack
 
-The Airport API Service provides endpoints to manage and query data related to
+SkyTrack provides endpoints to manage and query data related to
 flights, crew members, airplanes, orders, and more. It is built using Django
 and Django REST Framework. For creating tasks was used Celery library.
 
